@@ -1,3 +1,4 @@
+import { response } from "express";
 import supertest from "supertest";
 import app from "./app";
 
@@ -259,6 +260,69 @@ describe("DELETE /planet/:id", ()=>{
     .expect("Content-Type", /text\/html/)
 
     expect(response.text).toContain("Cannot DELETE /planets/asd")
+  })
+});
+
+describe("POST /planets/:id/photo", ()=>{
+
+  test("Valid request with a PNG file upload", async ()=>{
+    await request
+    .post("/planets/23/photo")
+    .attach("photo","test-fixtures/photos/file.png")
+    .expect(201)
+    .expect("Access-Control-Allow-Origin","http://localhost:8080");
+
+  })
+
+  test("Valid request with a JPG file upload", async ()=>{
+    await request
+    .post("/planets/23/photo")
+    .attach("photo","test-fixtures/photos/file.jpg")
+    .expect(201)
+    .expect("Access-Control-Allow-Origin","http://localhost:8080");
+
+  })
+
+  test("Invalid request with a Text file upload", async ()=>{
+    const response = await request
+    .post("/planets/23/photo")
+    .attach("photo","test-fixtures/photos/file.txt")
+    .expect(500)
+    .expect("Content-Type", /text\/html/);
+
+    expect(response.text).toContain("Error: the uploaded file must be JPG or a PNG image.")
+
+  })
+
+  test("Planet does not exist", async () =>{
+        //@ts-ignore
+        prismaMock.planet.update.mockRejectedValue(new Error("Error"));
+
+        const  response = await request
+        .post("/planets/23/photo")
+        .attach("photo","test-fixtures/photos/file.png")
+        .expect(404)
+        .expect("Content-Type", /text\/html/)
+
+        expect(response.text).toContain("Cannot POST /planets/23/photo")
+  })
+
+  test("Invalid Planet ID", async ()=>{
+    const response = await request
+    .post("/planets/asd/photo")
+    .expect(404)
+    .expect("Content-Type", /text\/html/)
+
+    expect(response.text).toContain("Cannot POST /planets/asd/photo")
+  });
+
+  test("Invalid request with no file upload",async () => {
+    const response = await request
+    .post("/planets/23/photo")
+    .expect(400)
+    .expect("Content-Type", /text\/html/)
+
+    expect(response.text).toContain("No photo file uploaded.")
   })
 })
 
