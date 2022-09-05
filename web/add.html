@@ -7,6 +7,9 @@
     <title>Document</title>
 </head>
 <body>
+    <p>
+        <a href="http://localhost:3000/auth/login?redirectTo=http://localhost:8080/add">Login</a>
+    </p>
     <form action="http://localhost:3000/planets" id="form-add">
         <label>
             <strong>Name:</strong>
@@ -26,7 +29,7 @@
         async function addPlanet(event){
             event.preventDefault();
 
-            const form = event.current.target
+            const form = event.currentTarget
 
             const formData = new FormData(form)
             const plainFormData = Object.fromEntries(formData.entries())
@@ -39,7 +42,8 @@
                 headers:{
                     "Content-Type":"application/Json"
                 },
-                body:formDataJsonString
+                body:formDataJsonString,
+                credentials:"include"
             });
 
             const planet = await response.json()

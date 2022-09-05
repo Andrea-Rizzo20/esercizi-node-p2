@@ -35,6 +35,7 @@ describe("GET /planets", ()=>{
       .get("/planets")
       .expect(200)
       .expect("Access-Control-Allow-Origin","http://localhost:8080")
+      .expect("Access-Control-Allow-Credentials", "true")
       .expect("Content-Type", /application\/json/);
 
     expect(response.body).toEqual(planets);
@@ -60,6 +61,7 @@ describe("GET /planet/:id", ()=>{
       .get("/planets/1")
       .expect(200)
       .expect("Access-Control-Allow-Origin","http://localhost:8080")
+      .expect("Access-Control-Allow-Credentials", "true")
       .expect("Content-Type", /application\/json/);
 
     expect(response.body).toEqual(planet);
@@ -113,6 +115,7 @@ describe("POST /planets", () => {
       })
       .expect(201)
       .expect("Access-Control-Allow-Origin","http://localhost:8080")
+      .expect("Access-Control-Allow-Credentials", "true")
       .expect("Content-Type", /application\/json/);
 
     expect(response.body).toEqual(planet);
@@ -165,6 +168,7 @@ describe("PUT /planets/:id", () => {
         moons: 12
       })
       .expect("Access-Control-Allow-Origin","http://localhost:8080")
+      .expect("Access-Control-Allow-Credentials", "true")
       .expect(200)
       .expect("Content-Type", /application\/json/);
 
@@ -234,7 +238,8 @@ describe("DELETE /planet/:id", ()=>{
     const response = await request
       .delete("/planets/1")
       .expect(204)
-      .expect("Access-Control-Allow-Origin","http://localhost:8080");
+      .expect("Access-Control-Allow-Origin","http://localhost:8080")
+      .expect("Access-Control-Allow-Credentials", "true");
 
     expect(response.text).toEqual("");
   });
@@ -269,7 +274,8 @@ describe("POST /planets/:id/photo", ()=>{
     .post("/planets/23/photo")
     .attach("photo","test-fixtures/photos/file.png")
     .expect(201)
-    .expect("Access-Control-Allow-Origin","http://localhost:8080");
+    .expect("Access-Control-Allow-Origin","http://localhost:8080")
+    .expect("Access-Control-Allow-Credentials", "true");
 
   })
 
@@ -278,7 +284,8 @@ describe("POST /planets/:id/photo", ()=>{
     .post("/planets/23/photo")
     .attach("photo","test-fixtures/photos/file.jpg")
     .expect(201)
-    .expect("Access-Control-Allow-Origin","http://localhost:8080");
+    .expect("Access-Control-Allow-Origin","http://localhost:8080")
+    .expect("Access-Control-Allow-Credentials", "true");
 
   })
 
